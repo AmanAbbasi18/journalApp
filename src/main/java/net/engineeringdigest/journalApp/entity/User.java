@@ -1,6 +1,8 @@
 package net.engineeringdigest.journalApp.entity;
 
 import javax.validation.constraints.NotNull;
+
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,6 +20,8 @@ import java.util.List;
 @Document(collection = "users")
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {   //called plane old java object
     @Id
     private ObjectId id;
@@ -25,10 +29,10 @@ public class User {   //called plane old java object
     @NotNull
     @Indexed(unique = true)
     private String userName;
-
     @NotNull
     private String password;
-
+    private String email;   //
+    private boolean sentimentAnalysis;   //
     @DBRef
     private List<JournalEntry> journalEntries = new ArrayList<>();
     private List<String> roles;

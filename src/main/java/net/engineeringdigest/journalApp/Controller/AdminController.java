@@ -1,8 +1,10 @@
 package net.engineeringdigest.journalApp.Controller;
 
+import net.engineeringdigest.journalApp.cache.AppCache;
 import net.engineeringdigest.journalApp.entity.User;
 import net.engineeringdigest.journalApp.repository.UserRepository;
 import net.engineeringdigest.journalApp.service.UserService;
+import org.apache.catalina.core.ApplicationFilterChain;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +21,9 @@ public class AdminController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private AppCache appCache;
+
     @GetMapping("/all-users")
     public ResponseEntity<?> getAllUsers() {
         List<User> users = userService.getAll();
@@ -31,6 +36,11 @@ public class AdminController {
     @PostMapping("/create-admin")   //this method can only be accesed by other admins
     public void createAdmin(@RequestBody User user) {
         userService.saveAdmin(user);
+    }
+
+    @GetMapping("clear-app-cache")
+    public void clearAppCache() {
+        appCache.init();
     }
 
 }
