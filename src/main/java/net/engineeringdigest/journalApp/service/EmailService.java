@@ -6,21 +6,25 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
-@Slf4j
 @Service
-public class EmailService {   //handles buissness logic of creating mail and returning
+@Slf4j
+public class EmailService {
 
-    @Autowired
+    @Autowired(required = false)
     private JavaMailSender javaMailSender;
 
-    public void sendEmail(String to, String subject, String body) {    //from toh already defined he application me
+    public void sendEmail(String to, String subject, String body) {
         try {
-            SimpleMailMessage mail = new SimpleMailMessage();
-            mail.setTo(to);
-            mail.setSubject(subject);
-            mail.setText(body);
-            javaMailSender.send(mail);
-        }catch(Exception e) {
+            if (javaMailSender != null) {
+                SimpleMailMessage mail = new SimpleMailMessage();
+                mail.setTo(to);
+                mail.setSubject(subject);
+                mail.setText(body);
+                javaMailSender.send(mail);
+            } else {
+                log.warn("Mail sender not configured. Skipping email.");
+            }
+        } catch (Exception e) {
             log.error("Exception while sending mail : ", e);
         }
     }
