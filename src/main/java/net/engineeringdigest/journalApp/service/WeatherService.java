@@ -1,6 +1,5 @@
 package net.engineeringdigest.journalApp.service;
 
-import javafx.print.PageLayout;
 import net.engineeringdigest.journalApp.cache.AppCache;
 import net.engineeringdigest.journalApp.constants.PlaceHolders;
 import net.engineeringdigest.journalApp.response.WeatherResponse;
