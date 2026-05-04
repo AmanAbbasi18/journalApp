@@ -12,7 +12,12 @@ target/
 .settings
 .springBeans
 .sts4-cache
-*.yml
+# ignore only dev config (local secrets)
+application-dev.yml
+
+# allow these for deployment
+!application.yml
+!application-prod.yml
 *.log
 ### IntelliJ IDEA ###
 .idea

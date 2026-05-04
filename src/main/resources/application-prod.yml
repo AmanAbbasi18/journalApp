@@ -1,0 +1,70 @@
+#kafka:
+#  bootstrap-servers: pkc-9q8rv.ap-south-2.aws.confluent.cloud:9092
+#
+#  producer:
+#    key-serializer: org.apache.kafka.common.serialization.StringSerializer
+#    value-serializer: org.apache.kafka.common.serialization.StringSerializer
+#
+#  consumer:
+#    group-id: weekly-sentiment-group
+#    key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+#    value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+#
+#    properties:
+#      spring:
+#        json:
+#          trusted:
+#            packages: net.engineeringdigest.journalApp.model
+#
+#  properties:
+#    security:
+#      protocol: SASL_SSL
+#
+#    sasl:
+#      mechanism: PLAIN
+#      jaas:
+#        config: org.apache.kafka.common.security.plain.PlainLoginModule required username='xxx' password='xxxx';
+#
+#    session:
+#      timeout:
+#        ms: 45000
+
+
+
+spring:
+  redis:
+    url: ${REDIS_URL}
+
+  data:
+    mongodb:
+      uri: ${MONGO_URI}
+      auto-index-creation: true
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+server:
+  port: ${PORT:8080}
+  servlet:
+    context-path: /journal
+
+# Kafka (safe fallback)
+kafka:
+  bootstrap-servers: ${KAFKA_SERVERS:dummy}
+
+weather:
+  api:
+    key: ${WEATHER_API_KEY}
+
+app:
+  personal:
+    email: ${APP_EMAIL}
