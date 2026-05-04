@@ -56,14 +56,14 @@ spring:
             enable: true
 
 server:
-  port: ${PORT:8080}
+  port: ${PORT}
   address: 0.0.0.0
   servlet:
     context-path: /journal
 
 # Kafka (safe fallback)
 kafka:
-  bootstrap-servers: ${KAFKA_SERVERS:dummy}
+  bootstrap-servers: ${KAFKA_SERVERS}
 
 weather:
   api:
