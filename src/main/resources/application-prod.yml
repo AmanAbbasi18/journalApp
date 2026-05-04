@@ -32,6 +32,9 @@
 
 
 spring:
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration
+
   redis:
     url: ${REDIS_URL}
 
