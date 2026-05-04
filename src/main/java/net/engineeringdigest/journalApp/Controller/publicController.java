@@ -35,13 +35,15 @@ public class publicController {
     //get also public
     //get all the user entries
     @GetMapping("/health-check")
-    public ResponseEntity<?> getAllUsers() {
-        List<User> allUsers = userService.getAll();
-        //System.out.println(allUsers.toString());
-        if(allUsers != null && !allUsers.isEmpty()) {
-            return new ResponseEntity<>(allUsers , HttpStatus.OK);  //200
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);   //404
+    public String getAllUsers() {
+        return "OK";
+        //cannot expose now all data ,personal sensitive
+//        List<User> allUsers = userService.getAll();
+//        //System.out.println(allUsers.toString());
+//        if(allUsers != null && !allUsers.isEmpty()) {
+//            return new ResponseEntity<>(allUsers , HttpStatus.OK);  //200
+//        }
+//        return new ResponseEntity<>(HttpStatus.NOT_FOUND);   //404
     }
 
     //create a new user entry
