@@ -36,6 +36,7 @@ public class publicController {
     //get all the user entries
     @GetMapping("/health-check")
     public String getAllUsers() {
+        log.info("Health is OK!");
         return "OK";
         //cannot expose now all data ,personal sensitive
 //        List<User> allUsers = userService.getAll();
