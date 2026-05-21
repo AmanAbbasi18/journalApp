@@ -1,5 +1,6 @@
 package net.engineeringdigest.journalApp.service;
 
+import net.engineeringdigest.journalApp.dto.UserRequestDTO;
 import net.engineeringdigest.journalApp.entity.JournalEntry;
 import net.engineeringdigest.journalApp.entity.User;
 import net.engineeringdigest.journalApp.repository.JournalEntryRepository;
@@ -32,6 +33,20 @@ public class UserService {
     private static final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();  //apply it on raw password
 
     public void saveEntry(User user) {    //to use when changing in user's journal entry(s) , if used the other saveNewUser one then will encrypt the encrypted password again.
+        userRepository.save(user);
+    }
+
+    public void updateUser(User user, UserRequestDTO dto) {
+        if(!dto.getUserName().isEmpty() && dto.getUserName() != "") {
+            user.setUserName(dto.getUserName());
+        }
+        if(!dto.getPassword().isEmpty() && dto.getPassword() != "") {
+            user.setPassword(passwordEncoder.encode(dto.getPassword()));
+        }
+        if(!dto.getEmail().isEmpty() && dto.getEmail() != "") {
+            user.setEmail(dto.getEmail());
+        }
+
         userRepository.save(user);
     }
 

@@ -1,7 +1,12 @@
 package net.engineeringdigest.journalApp.Controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
+import net.engineeringdigest.journalApp.dto.LoginRequestDTO;
+import net.engineeringdigest.journalApp.dto.UserRequestDTO;
 import net.engineeringdigest.journalApp.entity.User;
+import net.engineeringdigest.journalApp.mapper.UserMapper;
 import net.engineeringdigest.journalApp.service.UserDetailsServiceImpl;
 import net.engineeringdigest.journalApp.service.UserService;
 import net.engineeringdigest.journalApp.utils.JwtUtil;
@@ -19,6 +24,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("/public")
+@Tag(name = "Public APIs")
 public class publicController {
     @Autowired
     private UserService userService;
@@ -49,7 +55,8 @@ public class publicController {
 
     //create a new user entry
     @PostMapping("/signup")
-    public ResponseEntity<Void> signup(@RequestBody User user) {  //jo bhi client bhejta body me json to java corresponding object me convert hojata,(body bhejre so aur hamare obj ke jitte bhi fields wan se bhejre (max <= our no. of fields) unke field name same rehna
+    public ResponseEntity<Void> signup(@RequestBody UserRequestDTO userRequestDTO) {  //jo bhi client bhejta body me json to java corresponding object me convert hojata,(body bhejre so aur hamare obj ke jitte bhi fields wan se bhejre (max <= our no. of fields) unke field name same rehna
+        User user = UserMapper.toEntity(userRequestDTO);
         if(userService.saveNewUser(user)){
             return new ResponseEntity<>(HttpStatus.CREATED);   //201
         } else {
@@ -57,11 +64,12 @@ public class publicController {
         }
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody User user) {  //jo bhi client bhejta body me json to java corresponding object me convert hojata,(body bhejre so aur hamare obj ke jitte bhi fields wan se bhejre (max <= our no. of fields) unke field name same rehna
+    @Operation(summary = "login with username and password or through token")
+    @PostMapping("/login")  //for client during login only 2 fields allows thatsit
+    public ResponseEntity<String> login(@RequestBody LoginRequestDTO dto) {  //jo bhi client bhejta body me json to java corresponding object me convert hojata,(body bhejre so aur hamare obj ke jitte bhi fields wan se bhejre (max <= our no. of fields) unke field name same rehna
         try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUserName(), user.getPassword()));   //internally userDetailsServieImpl method call hora j ki load karta user ke details DB se
-            UserDetails userDetails = userDetailsService.loadUserByUsername(user.getUserName());  //dah! the fact got autenticated means username and passwrd exists correctly in db
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(dto.getUserName(), dto.getPassword()));   //internally userDetailsServieImpl method call hora j ki load karta user ke details DB se
+            UserDetails userDetails = userDetailsService.loadUserByUsername(dto.getUserName());  //dah! the fact got autenticated means username and passwrd exists correctly in db
             String jwt = jwtUtil.generateToken(userDetails.getUsername());
             return new ResponseEntity<>(jwt, HttpStatus.OK);   //once he signup and 1st time logins then he gets a jwt token
         }

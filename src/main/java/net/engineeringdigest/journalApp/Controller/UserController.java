@@ -1,5 +1,8 @@
 package net.engineeringdigest.journalApp.Controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import net.engineeringdigest.journalApp.dto.UserRequestDTO;
 import net.engineeringdigest.journalApp.entity.JournalEntry;
 import net.engineeringdigest.journalApp.entity.User;
 import net.engineeringdigest.journalApp.repository.UserRepository;
@@ -20,6 +23,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/user")
+@Tag(name = "User APIs" , description = "Read, Update & Delete User")
 public class UserController {
 
     @Autowired
@@ -32,14 +36,17 @@ public class UserController {
 
     //Update an user entry
     @PutMapping
-    public ResponseEntity<Void> updateUser(@RequestBody User user) {
+    @Operation(summary = "Update the user")
+    public ResponseEntity<Void> updateUser(@RequestBody UserRequestDTO dto) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userName = authentication.getName();   //if got authenticated then his details are gonna be in SecurityContextHolder like username from login and password(raw) and roles and all from db
 
         User userInDb = userService.findByUserName(userName);  //since it will save the user with same userId(ObjectId) we don't have to change anything else on same object it will get updated, takes informtn from the auth obj and can update the name and password aswell
-        userInDb.setUserName(user.getUserName());     //no need to put check because if got authenticated then means exists in DB
-        userInDb.setPassword(user.getPassword());
-        userService.saveNewUser(userInDb);
+//        userInDb.setUserName(dto.getUserName());     //no need to put check because if got authenticated then means exists in DB
+//        userInDb.setPassword(dto.getPassword());  //changes password aswell no thatswhy doing savenewUser -> in it doing password encoding else would have used just save user
+//        userInDb.setEmail(dto.getEmail());
+//        userService.saveNewUser(userInDb);
+        userService.updateUser(userInDb , dto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -51,6 +58,7 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT); //204
     }
 
+    @Operation(summary = "Tells you weather and temperature")
     @GetMapping
     public ResponseEntity<?> greetings() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -64,6 +72,4 @@ public class UserController {
         }
         return new ResponseEntity<>("Hi " + greetings , HttpStatus.OK);
     }
-
-
 }

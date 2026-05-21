@@ -1,6 +1,7 @@
 package net.engineeringdigest.journalApp.service;
 
 import ch.qos.logback.core.CoreConstants;
+import net.engineeringdigest.journalApp.dto.JournalEntryDTO;
 import net.engineeringdigest.journalApp.entity.JournalEntry;
 import net.engineeringdigest.journalApp.entity.User;
 import net.engineeringdigest.journalApp.repository.JournalEntryRepository;
@@ -43,7 +44,7 @@ public class JournalEntryService {
     public void saveEntry(JournalEntry oldEntry , JournalEntry newEntry) {
         oldEntry.setTitle(newEntry.getTitle() != null && !newEntry.getTitle().isEmpty() ? newEntry.getTitle() : oldEntry.getTitle());
         oldEntry.setContent(newEntry.getContent() != null && !newEntry.getContent().isEmpty() ? newEntry.getContent() : oldEntry.getContent());
-        journalEntryRepository.save(oldEntry);
+        journalEntryRepository.save(oldEntry);  //doesn't make a new entry bcause same obj id
     }
     public void saveEntry(JournalEntry entry) {
         journalEntryRepository.save(entry);
